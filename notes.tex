@@ -1,0 +1,78 @@
+\documentclass{amsart}
+
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{hyperref}
+
+\newtheorem*{definition}{Definition}
+\newtheorem*{theorem}{Theorem}
+\newtheorem*{lemma}{Lemma}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{axiom}{Axiom}
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert} % absolute value
+% Swap the definition of \abs*, so that \abs
+% resizes the size of the bars, and the starred version does not.
+\makeatletter
+\let\oldabs\abs%
+\def\abs{\@ifstar{\oldabs}{\oldabs*}}
+\makeatother
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\st}{\mathrel{:}}
+
+\title{CSCI 2540: Probabilistic Methods in Computer Science (Notes)}
+\author{Alexander Lee}
+
+\begin{document}
+
+\maketitle
+
+\section*{1. Events and Probability}
+
+\subsection*{1.2. Axioms of Probability}
+
+\begin{definition}[1.1]
+  A probability space has three components:
+  \begin{enumerate}
+    \item a sample space $\Omega$, which is the set of all possible outcomes of
+      the random process modeled by the probability space;
+    \item a family of sets $\mathcal{F}$ representing the allowable events,
+      where each set in $\mathcal{F}$ is a subset of the sample space $\Omega$;
+      and
+    \item a probability function $\Pr: \mathcal{F} \to \R$ satisfying the
+      following definition.
+  \end{enumerate}
+\end{definition}
+
+\begin{definition}[1.2]
+  A probability function is any function $\Pr: \mathcal{F} \to \R$ that
+  satisfies the following conditions:
+  \begin{enumerate}
+    \item for any event $E$, $0 \leq \Pr(E) \leq 1$;
+    \item $\Pr(\Omega) = 1$; and
+    \item for any finite or countably infinite sequence of pairwise mutually
+      disjoint events $E_1, E_2, E_3, \ldots$,
+      \[
+        \Pr \left( \bigcup_{i \geq 1} E_i \right) = \sum_{i \geq 1} \Pr(E_i).
+      \]
+  \end{enumerate}
+\end{definition}
+
+\begin{lemma}[1.1]
+  For any two events $E_1$ and $E_2$,
+  \[
+    \Pr(E_1 \cup E_2) = \Pr(E_1) + \Pr(E_2) - \Pr(E_1 \cap E_2).
+  \]
+\end{lemma}
+
+\begin{lemma}[1.2 Union Bound]
+  For any finite or countably infinite sequence of events $E_1, E_2, \ldots$,
+  \[
+    \Pr \left( \bigcup_{i \geq 1} E_i \right) \leq \sum_{i \geq 1} \Pr(E_i).
+  \]
+\end{lemma}
+
+\end{document}
