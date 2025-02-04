@@ -21,6 +21,9 @@
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\Q}{\mathbb{Q}}
 \newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbf{E}}
+\newcommand{\Var}{\mathbf{Var}}
+\newcommand{\Cov}{\mathbf{Cov}}
 \newcommand{\st}{\mathrel{:}}
 
 \title{CSCI 1550: Probabilistic Methods in CS \\ \small{Notes}}
@@ -121,5 +124,244 @@
     \Pr(E_j)}{\sum_{i = 1}^n \Pr(B \mid E_i) \Pr(E_i)}.
   \]
 \end{theorem}
+
+\section{Discrete Random Variables and Expectation}
+
+\begin{definition}
+  A random variable $X$ on a sample space $\Omega$ is a real-valued (measurable)
+  function on $\Omega$; that is, $X : \Omega \to \R$. A discrete random variable
+  is a random variable that takes on only a finite or countably infinite numbers
+  of values.
+\end{definition}
+
+\begin{definition}
+  Two random variable $X$ and $Y$ are independent if and only if
+  \[
+    \Pr((X = x) \cap (Y = y)) = \Pr(X = x) \cdot \Pr(Y = y)
+  \]
+  for all values $x$ and $y$. Similarly, random variables $X_1, X_2, \ldots,
+  X_k$ are mutually independent if and only if, for any subset $I \subseteq [1,
+  k]$ and any values $x_i, i \in I$,
+  \[
+    \Pr \left( \bigcap_{i \in I} (X_i = x_i) \right) = \prod_{i \in I} \Pr(X_i =
+    x_i).
+  \]
+\end{definition}
+
+\begin{definition}
+  The expectation of a discrete random variable $X$, denoted by $\E[X]$, is
+  given by
+  \[
+    \E[X] = \sum_i i \Pr(X = i),
+  \]
+  where the summation is over all values in the range of $X$. The expectation is
+  finite if $\sum_i \abs{i} \Pr(X = i)$ converges; otherwise, the expectation is
+  unbounded.
+\end{definition}
+
+\begin{theorem}[Linearity of Expectations]
+  For any finite collection of discrete random variables $X_1, X_2, \ldots, X_n$
+  with finite expectations,
+  \[
+    \E \left[ \sum_{i = 1}^n X_i \right] = \sum_{i = 1}^n \E[X_i].
+  \]
+\end{theorem}
+
+\begin{lemma}
+  For any constant $c$ and discrete random variable $X$,
+  \[
+    \E[cX] = c\E[X].
+  \]
+\end{lemma}
+
+\begin{definition}
+  Consider a sequence of $n$ independent experiments, each of which succeeds
+  with probability $p$. If we let $X$ represent the number of successes in the
+  $n$ experiments, then $X$ has a binomial distribution. A binomial random
+  variable $X$ with parameters $n$ and $p$, denoted by $B(n, p)$, is defined by
+  the following probability distribution on $j = 0, 1, 2, \ldots, n$:
+  \[
+    \Pr(X = j) = \binom{n}{j} p^j {(1 - p)}^{n - j}.
+  \]
+  That is, the binomial random variable $X$ equals $j$ when there are exactly
+  $j$ successes and $n - j$ failures in $n$ independent experiments, each of
+  which is successful with probability $p$.
+\end{definition}
+
+\begin{lemma}
+  For a binomial random variable $X$ with parameters $n$ and $p$,
+  \[
+    \E[X] = np.
+  \]
+\end{lemma}
+
+\begin{definition}
+  \[
+    \E[Y \mid Z = z] = \sum_y y \Pr(Y = y \mid Z = z),
+  \]
+  where the summation is over all $y$ in the range of $Y$.
+\end{definition}
+
+\begin{lemma}
+  For any random variables $X$ and $Y$,
+  \[
+    \E[X] = \sum_y \Pr(Y = y) \E[X \mid Y = y],
+  \]
+  where the sum is over all values in the range of $Y$ and all of the
+  expectations exist.
+\end{lemma}
+
+\begin{lemma}
+  For any finite collection of discrete random variables $X_1, X_2, \ldots, X_n$
+  with finite expectations and for any random variable $Y$,
+  \[
+    \E \left[ \sum_{i = 1}^n X_i \mid Y = y \right] = \sum_{i = 1}^n \E[X_i \mid
+    Y = y].
+  \]
+\end{lemma}
+
+\begin{definition}
+  The expression $\E[X \mid Y]$ is a random variable $f(Z)$ that takes on the
+  value $\E[Y \mid Z = z]$ when $Z = z$.
+\end{definition}
+
+\begin{theorem}
+  \[
+    \E[Y] = \E[\E[Y \mid Z]].
+  \]
+\end{theorem}
+
+\begin{definition}
+  We perform a sequence of independent trials until the first success, where
+  each trial succeeds with probability $p$. A geometric random variable $X$ with
+  parameter $p$ is given by the following probability distribution on $n = 1, 2,
+  \ldots$,:
+  \[
+    \Pr(X = n) = {(1 - p)}^{n - 1} p.
+  \]
+  That is, for the geometric random variable $X$ to equal $n$, there must be $n
+  - 1$ failures, followed by a success.
+\end{definition}
+
+\begin{lemma}
+  For a geometric random variable $X$ with parameter $p$ and for $n > 0$,
+  \[
+    \Pr(X = n + k \mid X > k) = \Pr(X = n).
+  \]
+\end{lemma}
+
+\begin{lemma}
+  Let $X$ be a discrete random variable that takes on only non-negative integer
+  values. Then
+  \[
+    \E[X] = \sum_{i = 1}^{\infty} \Pr(X \geq i).
+  \]
+\end{lemma}
+
+\begin{lemma}
+  For a geometric random variable $X$ with parameter $p$,
+  \[
+    \E[X] = \frac{1}{p}.
+  \]
+\end{lemma}
+
+\begin{lemma}
+  The harmonic number $H(n) = \sum_{i = 1}^n 1/i$ satisfies $H(n) = \ln n +
+  \Theta(1)$.
+\end{lemma}
+
+\section{Moments and Deviations}
+
+\begin{theorem}[Markov's Inequality]
+  Let $X$ be a random variable that assumes only non-negative values. Then, for
+  all $a > 0$,
+  \[
+    \Pr(X \geq a) \leq \frac{\E[X]}{a}.
+  \]
+\end{theorem}
+
+\begin{definition}
+  The kth moment of a random variable $X$ is $\E[X^k]$.
+\end{definition}
+
+\begin{definition}
+  The \emph{variance} of a random variable $X$ is defined as
+  \[
+    \Var[X] = \E[{(X - \E[X])}^2] = \E[X^2] - {(\E[X])}^2.
+  \]
+  The \emph{standard deviation} of a random variable $X$ is
+  \[
+    \sigma[X] = \sqrt{\Var[X]}.
+  \]
+\end{definition}
+
+\begin{definition}
+  The \emph{covariance} of two random variables $X$ and $Y$ is
+  \[
+    \Cov(X, y) = \E[(X - \E[X]) (Y - \E[Y])].
+  \]
+\end{definition}
+
+\begin{theorem}
+  For any two random variables $X$ and $Y$,
+  \[
+    \Var[X + Y] = \Var[X] + \Var[Y] + 2 \Cov(X, Y).
+  \]
+\end{theorem}
+
+\begin{theorem}
+  If $X$ and $Y$ are two independent random variables, then
+  \[
+    \E[X \cdot Y] = \E[X] \cdot \E[Y].
+  \]
+\end{theorem}
+
+\begin{corollary}
+  If $X$ and $Y$ are independent random variables, then
+  \[
+    \Cov(X, Y) = 0
+  \]
+  and
+  \[
+    \Var[X + Y] = \Var[X] + \Var[Y].
+  \]
+\end{corollary}
+
+\begin{theorem}
+  Let $X_1, X_2, \ldots, X_n$ be mutually independent random variables. Then
+  \[
+    \Var \left[ \sum_{i = 1}^n X_i \right] = \sum_{i = 1}^n \Var[X_i].
+  \]
+\end{theorem}
+
+\begin{lemma}
+  For a binomial random variable $X$ with parameters $n$ and $p$,
+  \[
+    \Var[X] = np(1 - p).
+  \]
+\end{lemma}
+
+\begin{theorem}[Chebyshev's Inequality]
+  For any $a > 0$,
+  \[
+    \Pr(\abs{X - \E[X]} \geq a) \leq \frac{\Var[X]}{a^2}.
+  \]
+\end{theorem}
+
+\begin{corollary}
+  For any $t > 1$,
+  \begin{align*}
+    \Pr(\abs{X - \E[X]} &\geq t \cdot \sigma[X]) \leq \frac{1}{t^2}\ \text{and} \\
+    \Pr(\abs{X - \E[X]} &\geq t \cdot \E[X]) \leq \frac{\Var[X]}{t^2
+    {(\E[X])}^2}.
+  \end{align*}
+\end{corollary}
+
+\begin{lemma}
+  For a geometric random variable $X$ with parameter $p$,
+  \[
+    \Var[X] = (1 - p) / p^2.
+  \]
+\end{lemma}
 
 \end{document}
