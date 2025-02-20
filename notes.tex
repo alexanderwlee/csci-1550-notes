@@ -33,6 +33,8 @@
 
 \maketitle
 
+% =================== Chapter 1 =================== 
+
 \section{Events and Probability}
 
 \begin{definition}
@@ -76,7 +78,7 @@
   \]
 \end{lemma}
 
-\begin{lemma}[1.3]
+\begin{lemma}
   Let $E_1, \ldots, E_n$ be any $n$ events. Then
   \begin{align*}
     \Pr \left( \bigcup_{i = 1}^n E_i \right) = & \sum_{i = 1}^n \Pr(E_i) - \sum_{i
@@ -124,6 +126,19 @@
     \Pr(E_j)}{\sum_{i = 1}^n \Pr(B \mid E_i) \Pr(E_i)}.
   \]
 \end{theorem}
+
+\begin{theorem}
+  For any $x \in \R$,
+  \[
+    1 - x \leq e^{-x}.
+  \]
+  Equivalently,
+  \[
+    1 + x \leq e^x.
+  \]
+\end{theorem}
+
+% =================== Chapter 2 =================== 
 
 \section{Discrete Random Variables and Expectation}
 
@@ -173,6 +188,20 @@
     \E[cX] = c\E[X].
   \]
 \end{lemma}
+
+\begin{definition}
+  Suppose that we run an experiment that succeeds with probability $p$ and fails
+  with probability $1 - p$. A variable $X$ is called a \emph{Bernoulli} or an
+  \emph{indicator} random variable if
+  \[
+    X =
+    \begin{cases}
+      1 & \text{if the experiments succeeds,} \\
+      0 & \text{otherwise.}
+    \end{cases}
+  \]
+  Note that $\E[X] = \Pr(X = 1) = p$.
+\end{definition}
 
 \begin{definition}
   Consider a sequence of $n$ independent experiments, each of which succeeds
@@ -270,6 +299,9 @@
   \Theta(1)$.
 \end{lemma}
 
+
+% =================== Chapter 3 =================== 
+
 \section{Moments and Deviations}
 
 \begin{theorem}[Markov's Inequality]
@@ -294,6 +326,13 @@
     \sigma[X] = \sqrt{\Var[X]}.
   \]
 \end{definition}
+
+\begin{lemma}
+  For a Bernoulli random variable with success probability $p$,
+  \[
+    \Var[X] = p(1 - p).
+  \]
+\end{lemma}
 
 \begin{definition}
   The \emph{covariance} of two random variables $X$ and $Y$ is
@@ -363,5 +402,195 @@
     \Var[X] = (1 - p) / p^2.
   \]
 \end{lemma}
+
+\begin{definition}
+  The $X$ be a random variable. The \emph{median} of $X$ is defined to be any
+  value $m$ such that
+  \[
+    \Pr(X \leq m) \geq \frac{1}{2}\quad \text{and}\quad \Pr(X \geq m) \geq
+    \frac{1}{2}.
+  \]
+\end{definition}
+
+% =================== Chapter 4 =================== 
+
+\section{Chernoff and Hoeffding Bounds}
+
+\begin{definition}
+  The \emph{moment generating function} of a random variable $X$ is
+  \[
+    M_X(t) = \E[e^{tX}].
+  \]
+\end{definition}
+
+\begin{theorem}
+  Let $X$ be a random variable with moment generating function $M_X(t)$. Under
+  the assumption that exchanging the expectation and differentiation operands is
+  legitimate, for all $n > 1$ we have
+  \[
+    \E[X^n] = M_X^{(n)}(0),
+  \]
+  where $M_X^{(n)}(0)$ is the \emph{$n$th derivative} of $M_X(t)$ evaluated at
+  $t = 0$.
+\end{theorem}
+
+\begin{theorem}
+  Let $X$ and $Y$ be two random variables. If
+  \[
+    M_X(t) = M_Y(t)
+  \]
+  for all $t \in (-\delta, \delta)$ for some $\delta > 0$, then $X$ and $Y$ have
+  the same distribution.
+\end{theorem}
+
+\begin{theorem}
+  If $X$ and $Y$ are independent random variables, then
+  \[
+    M_{X + Y}(t) = M_X(t) M_Y(t).
+  \]
+\end{theorem}
+
+\begin{definition}
+  A sum of independent 0-1 random variables are known as \emph{Poisson trials}. %chktex 8
+  The distributions of the random variables in Poisson trials are not
+  necessarily identical.\ \emph{Bernoulli trials} are a special case of Poisson
+  trials where the independent 0-1 random variables have the same distribution; %chktex 8
+  in other words, all trials are Poisson trials that take on the value 1 with
+  the same probability.
+\end{definition}
+
+\begin{theorem}
+  Let $X_1, \ldots, X_n$ be independent Poisson trials such that $\Pr(X_i = 1) =
+  p_i$. Let $X = \sum_{i=1}^n X_i$ and $\mu = \E[X]$. Then the following
+  Chernoff bounds hold:
+  \begin{enumerate}
+    \item for any $\delta > 0$,
+      \[
+        \Pr(X \geq (1 + \delta) \mu) \leq {\left( \frac{e^\delta}{{(1 +
+        \delta)}^{(1 + \delta)}} \right)}^\mu;
+      \]
+    \item for $0 < \delta \leq 1$,
+      \[
+        \Pr(X \geq (1 + \delta) \mu) \leq e^{-\mu \delta^2 / 3};
+      \]
+    \item for $R \geq 6 \mu$,
+      \[
+        \Pr(X \geq R) \leq e^{-R}.
+      \]
+  \end{enumerate}
+\end{theorem}
+
+\begin{theorem}
+  Let $X_1, \ldots, X_n$ be independent Poisson trials such that $\Pr(X_i = 1) =
+  p_i$. Let $X = \sum_{i=1}^n X_i$ and $\mu = \E[X]$. Then, for $0 < \delta <
+  1$:
+  \begin{enumerate}
+    \item 
+      \[
+        \Pr(X \leq (1 - \delta) \mu) \leq {\left( \frac{e^{-\delta}}{{(1 -
+        \delta)}^{(1 - \delta)}} \right)}^\mu;
+      \]
+    \item
+      \[
+        \Pr(X \leq (1 - \delta) \mu) \leq e^{-\mu \delta^2 / 2}
+      \]
+  \end{enumerate}
+\end{theorem}
+
+\begin{corollary}
+  Let $X_1, \ldots, X_n$ be independent Poisson trials such that $\Pr(X_i = 1) =
+  p_i$. Let $X = \sum_{i=1}^n X_i$ and $\mu = \E[X]$. For $0 < \delta < 1$,
+  \[
+    \Pr(\abs{X - \mu} \geq \delta \mu) \leq 2 e^{-\mu \delta^2 / 3}.
+  \]
+\end{corollary}
+
+\begin{theorem}
+  Let $X_1, \ldots, X_n$ be independent random variables with
+  \[
+    \Pr(X_i = 1) = \Pr(X_i = -1) = \frac{1}{2}.
+  \]
+  Let $X = \sum_{i=1}^n X_i$. For any $a > 0$,
+  \[
+    \Pr(X \geq a) \leq e^{-a^2 / 2n}.
+  \]
+  By symmetry we also have
+  \[
+    \Pr(X \leq -a) \leq e^{-a^2 / 2n}.
+  \]
+\end{theorem}
+
+\begin{corollary}
+  Let $X_1, \ldots X_n$ be independent random variables with
+  \[
+    \Pr(X_i = 1) = \Pr(X_i = -1) = \frac{1}{2}.
+  \]
+  Let $X = \sum_{i=1}^n X_i$. Then, for any $a > 0$,
+  \[
+    \Pr(|X| \geq a) \leq 2e^{-a^2 / 2n}.
+  \]
+\end{corollary}
+
+\begin{corollary}
+  Let $Y_1, \ldots, Y_n$ be independent random variables with
+  \[
+    \Pr(Y_i = 1) = \Pr(Y_i = 0) = \frac{1}{2}.
+  \]
+  Let $Y = \sum_{i=1}^n Y_i$ and $\mu = \E[Y] = n / 2$.
+  \begin{enumerate}
+    \item For any $a > 0$,
+      \[
+        \Pr(Y \geq \mu + a) \leq e^{-2a^2 / n}.
+      \]
+    \item For any $\delta > 0$,
+      \[
+        \Pr(Y \geq (1 + \delta) \mu) \leq e^{-\delta^2 \mu}.
+      \]
+  \end{enumerate}
+\end{corollary}
+
+\begin{corollary}
+  Let $Y_1, \ldots, Y_n$ be independent random variables with
+  \[
+    \Pr(Y_i = 1) = \Pr(Y_i = 0) = \frac{1}{2}.
+  \]
+  Let $Y = \sum_{i=1}^n Y_i$ and $\mu = \E[Y] = n / 2$.
+  \begin{enumerate}
+    \item For any $0 < a < \mu$,
+      \[
+        \Pr(Y \leq \mu - a) \leq e^{-2a^2 / n}.
+      \]
+    \item For any $0 < \delta < 1$,
+      \[
+        \Pr(Y \leq (1 - \delta) \mu) \leq e^{-\delta^2 \mu}.
+      \]
+  \end{enumerate}
+\end{corollary}
+
+\begin{theorem}[Hoeffding Bound]
+  Let $X_1, \ldots, X_n$ be independent random variables such that for all $1
+  \leq i \leq n$, $\E[X_i] = \mu$ and $\Pr(a \leq X_i \leq b) = 1$. Then
+  \[
+    \Pr \left( \abs{\frac{1}{n} \sum_{i=1}^n X_i - \mu} \geq \epsilon \right)
+    \leq 2e^{-2n \epsilon^2 / {(b - a)}^2}.
+  \]
+\end{theorem}
+
+\begin{lemma}[Hoeffding's Lemma]
+  Let $X$ be a random variable such that $\Pr(X \in [a, b]) = 1$ and $\E[X] =
+  0$. Then for every $\lambda > 0$,
+  \[
+    \E[e^{\lambda X}] \leq e^{\lambda^2 {(b - a)}^2 / 8}.
+  \]
+\end{lemma}
+
+\begin{theorem}
+  Let $X_1, \ldots, X_n$ be independent random variables with $\E[X_i] = \mu_i$
+  and $\Pr(a_i \leq X_i \leq b_i) = 1$ for constants $a_i$ and $b_i$. Then
+  \[
+    \Pr \left( \abs{\sum_{i=1}^n X_i - \sum_{i=1}^n \mu_i} \geq \epsilon \right)
+    \leq 2e^{-2 \epsilon^2 / \sum_{i=1}^n {(b_i - a_i)}^2}.
+  \]
+\end{theorem}
 
 \end{document}
